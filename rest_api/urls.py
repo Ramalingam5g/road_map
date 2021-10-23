@@ -15,9 +15,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from .views import RoadDetail
+from .views import RoadDetail,RoadList,RoadTypeView,RoadPropertyView
+
 #import pdb;pdb.set_trace()
 urlpatterns = [
-    path('',RoadDetail.as_view(),name ='get'),
-    path('',RoadDetail.as_view(),name='post'),
+    #path('get/', RoadList.as_view(),name='get'),
+    path('roadtype/',RoadTypeView.as_view()),
+    path('attribute/',RoadPropertyView.as_view()),
+    path('update/<int:id>',RoadList.as_view(),name='put'),
+    path('delete/<int:id>',RoadList.as_view(),name='delete'),
+    path('', RoadList.as_view()),
+    #path('get/<int:pk>/', views.RoadDetail.as_view()),
+    # path('post/',RoadDetail.as_view(),name='post'),
+    # path('get/',RoadDetail.as_view(),name='get'),
+    # path('get_object/<int:pk>',RoadDetail.as_view(),name='get_object'),
+    # path('put/<int:id>',RoadDetail.as_view(),name='put'),
+    # path('delete/<int:id>',RoadDetail.as_view(),name='delete')
+    
 ]

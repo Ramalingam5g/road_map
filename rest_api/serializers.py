@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from . models import Road,RoadProperties
+from . models import RoadType,RoadProperties
 
-class RoadSerializers(serializers.ModelSerializer):
+class RoadTypeSerializers(serializers.ModelSerializer):
     class Meta :
         #import pdb;pdb.set_trace()
-        model = Road
+        model = RoadType
         fields = '__all__'
 
 class RoadPropertiesSerializer(serializers.ModelSerializer):

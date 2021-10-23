@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'road_map.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'road_map',
+        'NAME': 'road_api',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': 'localhost',
