@@ -9,6 +9,7 @@ class RoadProperties(models.Model):
     width = models.DecimalField(max_digits=19, decimal_places=10)
     latitude = models.DecimalField(max_digits=19, decimal_places=10)
     longitude = models.DecimalField(max_digits=19, decimal_places=10)
+    distance = models.IntegerField( blank=False ,null=False)
     road_type = models.ForeignKey(
         RoadType, on_delete=models.CASCADE, null=True,blank=False)
 
