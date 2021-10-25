@@ -63,7 +63,8 @@ class RoadView(APIView):
 
 
 class RoadListView(APIView):
-    """View for get list of road type and name """
+    """View for get list of road type and name 
+    using latitude and longitude with distance """
     def get(self, request, format=None):
         roadproperty = RoadProperties.objects.filter(
             latitude=request.GET["latitude"],
