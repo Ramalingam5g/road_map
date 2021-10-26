@@ -32,11 +32,10 @@ class RoadPropertyView(APIView):
 class RoadView(APIView):
     """ View for CRUD(add,edit,delete) method """
     def post(self, request):
-        '''Method for create a new road'''
+        """ Method for create a new road """
         if request.method == "POST":
             data = request.data
             road_type = {"road_type": request.data["road_type"]}
-            #name = data.pop("road_type")
             serializer = RoadTypeSerializers(data=road_type)
             if serializer.is_valid():
                 roadtype = serializer.save()
@@ -52,7 +51,7 @@ class RoadView(APIView):
         road = RoadType.objects.get(id=id) # pylint: disable=no-member
         road_data = {"road_type": request.data["road_type"]}
         serializer = RoadTypeSerializers(road, data=road_data)
-        if serializer.is_valid(): 
+        if serializer.is_valid():
             serializer.save()
         property_data = request.data
         property_data["road_type"] = id
@@ -74,11 +73,11 @@ class RoadListView(APIView):
     """View for get list of road type and name
     using latitude and longitude with distance """
     def get(self, request):
-        '''
+        """
         Function for get a road name and road type
         using their latitude and longitude with their distance
 
-        '''
+        """
         # pylint: disable=no-member
         roadproperty = RoadProperties.objects.filter(
             latitude=request.GET["latitude"],
