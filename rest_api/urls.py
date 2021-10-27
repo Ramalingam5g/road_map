@@ -15,14 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from .views import RoadListView,RoadView,RoadTypeView,RoadPropertyView
+from rest_framework import routers
+from .views import RoadView,RoadTypeView
 
 urlpatterns = [
     path('listroadtype/',RoadTypeView.as_view()),
-    path('listattribute/',RoadPropertyView.as_view()),
-    path('post/',RoadView.as_view(),name='post'),
-    path('update/<int:id>',RoadView.as_view(),name='put'),
-    path('delete/<int:id>',RoadView.as_view(),name='delete'),
-    path('', RoadView.as_view()),
-    path('distance/',RoadListView.as_view()),
+    path('',RoadView.as_view()),
 ]

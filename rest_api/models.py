@@ -1,4 +1,5 @@
 from django.db import models
+import pdb;pdb.set_trace()
 
 class RoadType(models.Model):
     road_type = models.CharField(max_length=255, blank=False, null=False)

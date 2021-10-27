@@ -43,15 +43,16 @@ class RoadView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, id=None):
+        import pdb;pdb.set_trace()
         road = RoadType.objects.get(id=id)
-        road_data = {"road_type": request.data["road_type"]}
-        serializer = RoadTypeSerializers(road, data=road_data)
-        if serializer.is_valid():
-            serializer.save()
-        property_data = request.data
-        property_data["road_type"] = id
-        road_property = RoadProperties.objects.get(road_type_id=id)
-        serializer = RoadPropertiesSerializer(road_property, data=property_data)
+        # road_data = {"road_type": request.data["road_type"]}
+        # serializer = RoadTypeSerializers(road, data=road_data)
+        # if serializer.is_valid():
+        #     serializer.save()
+        
+        road["road_type"] = road_id
+        road_property = RoadProperties.objects.get(id=id)
+        serializer = RoadPropertiesSerializer(road_id,  data=road_property)
         if serializer.is_valid():
             serializer.save()
         return Response(serializer.data)
@@ -63,8 +64,10 @@ class RoadView(APIView):
 
 
 class RoadListView(APIView):
-    """View for get list of road type and name 
-    using latitude and longitude with distance """
+    """
+    View for get list of road type and name 
+    using latitude and longitude with distance
+    """
     def get(self, request, format=None):
         roadproperty = RoadProperties.objects.filter(
             latitude=request.GET["latitude"],
