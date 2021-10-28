@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import RoadProperties, RoadType
 from .serializers import RoadPropertiesSerializer, RoadTypeSerializers
+import geopy.distance
+from math import sin, cos, sqrt, atan2, radians
 
 
 
@@ -31,58 +33,11 @@ class RoadTypeView(APIView):
                 roadproperties.save()
             return Response(roadproperties.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    # def get(self, request):
-    #     import pdb;pdb.set_trace()
-    #     '''Function for get a attribute of a road type'''
-    #     # pylint: disable=no-member
-    #     if request.GET["road_type"] != " ":
-    #         get_roadproperty = RoadProperties.objects.filter(
-    #             road_type__road_type=request.GET["road_type"]
-    #         )
-    #         serializer = RoadPropertiesSerializer(get_roadproperty, many=True)
-    #         return Response(serializer.data)
-    #     elif request.GET["latitude"] and request.GET["longitude"] and request.GET["distance"] != "":
-    #         roadproperty = RoadProperties.objects.filter(
-    #             latitude=request.GET["latitude"],
-    #             longitude=request.GET["longitude"],
-    #             distance=request.GET["distance"],
-    #         )
-    #         list_value = roadproperty.values_list("name", "road_type__road_type")
-    #         context = {"road_names": list_value}
-    #         return Response(context)
-
-        
-
-
-    # def get(self, request):
-    #     import pdb;pdb.set_trace()
-    #     """
-    #     Function for get a road name and road type
-    #     using their latitude and longitude with their distance
-    #     """
-    #     # pylint: disable=no-member
-    #     if road_type == " ":
-    #         get_roadproperty = RoadProperties.objects.filter(
-    #             road_type__road_type=request.GET["road_type"]
-    #         )
-    #         serializer = RoadPropertiesSerializer(get_roadproperty, many=True)
-    #         return Response(serializer.data)
-
-        # else:
-        #     roadproperty = RoadProperties.objects.filter(
-        #         latitude=request.GET["latitude"],
-        #         longitude=request.GET["longitude"],
-        #         distance=request.GET["distance"],
-        #     )
-        #     list_value = roadproperty.values_list("name", "road_type__road_type")
-        #     context = {"road_names": list_value}
-        #     return Response(context)
-
+     
 
 
 class RoadView(APIView):
-    import pdb;pdb.set_trace()
+    
     """ View for CRUD(add,edit,delete) method """
 
     def get(self, request, id=None):
@@ -106,35 +61,32 @@ class RoadView(APIView):
         road = RoadType.objects.get(id=id)
         road.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
-    # def get(self, request):
-    #     import pdb;pdb.set_trace()
-    #     '''Function for get a attribute of a road type'''
-    #     # pylint: disable=no-member
-    #     get_roadproperty = RoadProperties.objects.filter(
-    #         road_type__road_type=request.GET["road_type"]
-    #     )
-    #     serializer = RoadPropertiesSerializer(get_roadproperty, many=True)
-    #     return Response(serializer.data)
 
-    
-    
+class calculate_distance(APIView):
+    import pdb;pdb.set_trace()
+    def get(self,request):
+        import pdb;pdb.set_trace()
+        R = 6373.0 \
+            
 
-    # class RoadListView(APIView):
-#     """View for get list of road type and name
-#     using latitude and longitude with distance """
-    # def get(self, request):
-    #     """
-    #     Function for get a road name and road type
-    #     using their latitude and longitude with their distance
-    #     """
-    #     # pylint: disable=no-member
-    #     roadproperty = RoadProperties.objects.filter(
-    #         latitude=request.GET["latitude"],
-    #         longitude=request.GET["longitude"],
-    #         distance=request.GET["distance"],
-    #     )
-    #     list_value = roadproperty.values_list("name", "road_type__road_type")
-    #     context = {"road_names": list_value}
-    #     return Response(context)
+        lat1 = int(float(request.GET["latitude"]))
+        lon1 = int(float(request.GET["latitude_a"]))
+        lat2 = int(float(request.GET["longitude"]))
+        lon2 = int(float(request.GET["longitude_a"]))
+        dlon = lon2 - lon1
+        dlat = lat2 - lat1
+
+        a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
+        c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+        distance = R * c
+
+        print("Result:", distance)
+        print("Should be:", distance, "km")
+        road_names = RoadProperties.objects.filter(distance__range=[0, distance])
+        list_value = road_names.values_list("name")
+        context = {"road_name": list_value}
+        return Response(context)
+
+       
 
