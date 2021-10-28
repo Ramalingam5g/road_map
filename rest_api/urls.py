@@ -19,6 +19,6 @@ from rest_framework import routers
 from .views import RoadView,RoadTypeView
 
 urlpatterns = [
-    path('listroadtype/',RoadTypeView.as_view()),
-    path('',RoadView.as_view()),
+    path('',RoadTypeView.as_view()),
+    path('road/<int:id>',RoadView.as_view()),
 ]
