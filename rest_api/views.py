@@ -1,12 +1,11 @@
 """ Views for road details in rest_framework using APIView """
+from math import sin, cos, sqrt, atan2, radians
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+import geopy.distance
 from .models import RoadProperties, RoadType
 from .serializers import RoadPropertiesSerializer, RoadTypeSerializers
-import geopy.distance
-from math import sin, cos, sqrt, atan2, radians
-
 
 class RoadTypeView(APIView):
     """ View for get type of road """
@@ -40,6 +39,7 @@ class RoadView(APIView):
     """ View for CRUD(add,edit,delete) method """
 
     def get(self, request, id=None):
+        """ Method for get a road properties individual """
         snippet = RoadProperties.objects.get(id=id)
         serializer = RoadPropertiesSerializer(snippet)
         return Response(serializer.data)
@@ -62,41 +62,18 @@ class RoadView(APIView):
 
 
 class calculate_distance(APIView):
-    
-
     def get(self, request):
         import pdb;pdb.set_trace()
-        R = 6373.0
 
-        lat1_value = float(request.GET["latitude"])
-        lat1 = radians(lat1_value)
-        lon1_value = float(request.GET["longitude"])
-        lon1 = radians(lon1_value)
-        lat2_value = float(request.GET["latitude_a"])
-        lat2 = radians(lat2_value)
-        lon2_value = float(request.GET["longitude_a"])
-        lon2 = radians(lon2_value)
-        dlon = lon2 - lon1
-        dlat = lat2 - lat1
+        lat1_value = float(request.GET["latitude_1"])
+        lon1_value = float(request.GET["longitude_1"])
+        lat2_value = float(request.GET["latitude_2"])
+        lon2_value = float(request.GET["longitude_2"])
         coords_1 = (lat1_value, lon1_value)
         coords_2 = (lat2_value, lon2_value)
 
-        context = (geopy.distance.geodesic(coords_1, coords_2).km)
+        calculate_distance = geopy.distance.geodesic(coords_1, coords_2).km
+        road_names = RoadProperties.objects.filter(distance__range=[0, calculate_distance])
+        list_value = road_names.values_list("name")
+        context = {"road_name": list_value}
         return Response(context)
-
-        # a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
-        # c = 2 * atan2(sqrt(a), sqrt(1 - a))
-
-        # distance = R * c
-
-        # print("Result:", distance)
-        # print("Should be:", distance, "km")
-        # road_names = RoadProperties.objects.filter(distance__range=[0, distance])
-        # list_value = road_names.values_list("name")
-        # context = {"road_name": list_value}
-        # return Response(context)
-
-        # coords_1 = (52.2296756, 21.0122287)
-        # coords_2 = (52.406374, 16.9251681)
-
-        # print (geopy.distance.vincenty(coords_1, coords_2).km )
