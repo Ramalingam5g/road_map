@@ -18,7 +18,6 @@ class RoadTypeView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        import pdb;pdb.set_trace()
         """ Method for create a new road """
         if request.method == "POST":
             data = request.data
@@ -34,15 +33,19 @@ class RoadTypeView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+
 class RoadView(APIView):
 
     """ View for CRUD(add,edit,delete) method """
 
-    def get(self, request, id=None):
-        """ Method for get a road properties individual """
-        snippet = RoadProperties.objects.get(id=id)
-        serializer = RoadPropertiesSerializer(snippet)
-        return Response(serializer.data)
+    # def get(self, request, id=None):
+    #     """ Method for get a road properties individual """
+    #     snippet = RoadProperties.objects.get(id=id)
+    #     serializer = RoadPropertiesSerializer(snippet)
+    #     return Response(serializer.data)
+    
+
+    
 
     def put(self, request, id=None):
         """Method for update a road using their id"""
@@ -62,9 +65,8 @@ class RoadView(APIView):
 
 
 class calculate_distance(APIView):
-    def get(self, request):
-        import pdb;pdb.set_trace()
 
+    def get(self, request):
         lat1_value = float(request.GET["latitude_1"])
         lon1_value = float(request.GET["longitude_1"])
         lat2_value = float(request.GET["latitude_2"])
@@ -77,3 +79,16 @@ class calculate_distance(APIView):
         list_value = road_names.values_list("name")
         context = {"road_name": list_value}
         return Response(context)
+
+    def get(self, request):
+        import pdb;pdb.set_trace()
+        '''Function for get a attribute of a road type'''
+        # pylint: disable=no-member
+        get_roadproperty = RoadProperties.objects.filter(
+            road_type__road_type=request.GET["road_type"]
+        )
+        all_fields = RoadProperties._meta.get_fields()
+        fields = {"field_name":all_fields}
+        print(all_fields)
+        serializer = RoadPropertiesSerializer(fields, many=True)
+        return Response(all_fields)
