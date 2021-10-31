@@ -66,19 +66,19 @@ class RoadView(APIView):
 
 class calculate_distance(APIView):
 
-    def get(self, request):
-        lat1_value = float(request.GET["latitude_1"])
-        lon1_value = float(request.GET["longitude_1"])
-        lat2_value = float(request.GET["latitude_2"])
-        lon2_value = float(request.GET["longitude_2"])
-        coords_1 = (lat1_value, lon1_value)
-        coords_2 = (lat2_value, lon2_value)
+    # def get_distance(self, request):
+    #     lat1_value = float(request.GET["latitude_1"])
+    #     lon1_value = float(request.GET["longitude_1"])
+    #     lat2_value = float(request.GET["latitude_2"])
+    #     lon2_value = float(request.GET["longitude_2"])
+    #     coords_1 = (lat1_value, lon1_value)
+    #     coords_2 = (lat2_value, lon2_value)
 
-        calculate_distance = geopy.distance.geodesic(coords_1, coords_2).km
-        road_names = RoadProperties.objects.filter(distance__range=[0, calculate_distance])
-        list_value = road_names.values_list("name")
-        context = {"road_name": list_value}
-        return Response(context)
+    #     calculate_distance = geopy.distance.geodesic(coords_1, coords_2).km
+    #     road_names = RoadProperties.objects.filter(distance__range=[0, calculate_distance])
+    #     list_value = road_names.values_list("name")
+    #     context = {"road_name": list_value}
+    #     return Response(context)
 
     def get(self, request):
         import pdb;pdb.set_trace()
@@ -87,8 +87,9 @@ class calculate_distance(APIView):
         get_roadproperty = RoadProperties.objects.filter(
             road_type__road_type=request.GET["road_type"]
         )
+        
         all_fields = RoadProperties._meta.get_fields()
+        print(all_fields.data)
         fields = {"field_name":all_fields}
-        print(all_fields)
         serializer = RoadPropertiesSerializer(fields, many=True)
-        return Response(all_fields)
+        return Response(serializer.data)

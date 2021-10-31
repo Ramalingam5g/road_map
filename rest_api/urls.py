@@ -21,5 +21,6 @@ from .views import RoadView,RoadTypeView,calculate_distance
 urlpatterns = [
     path('listroadtype',RoadTypeView.as_view()),
     path('road/<int:id>',RoadView.as_view()),
-    path('calculate',calculate_distance.as_view())
+    path('cal',calculate_distance.as_view(),name='get_distance'),
+    path('calculate',calculate_distance.as_view(),name='get_attributes')
 ]
