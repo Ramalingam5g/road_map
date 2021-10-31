@@ -16,11 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from rest_framework import routers
-from .views import RoadView,RoadTypeView,calculate_distance
+from .views import RoadView,RoadTypeView
 
 urlpatterns = [
-    path('listroadtype',RoadTypeView.as_view()),
+    path('roadtypeview',RoadTypeView.as_view()),
     path('road/<int:id>',RoadView.as_view()),
-    path('cal',calculate_distance.as_view(),name='get_distance'),
-    path('calculate',calculate_distance.as_view(),name='get_attributes')
 ]

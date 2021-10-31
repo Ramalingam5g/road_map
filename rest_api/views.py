@@ -9,15 +9,41 @@ from .serializers import RoadPropertiesSerializer, RoadTypeSerializers
 
 class RoadTypeView(APIView):
     """ View for get type of road """
+    import pdb;pdb.set_trace()
 
     def get(self, request):
         """Function for get road type with its id"""
-        # pylint: disable=no-member
-        get_roadtype = RoadType.objects.all()
-        serializer = RoadTypeSerializers(get_roadtype, many=True)
-        return Response(serializer.data)
+        import pdb;pdb.set_trace()
+        if request.GET.get("road_type"):
+            get_roadproperty = RoadProperties.objects.filter(
+                road_type__road_type=request.GET["road_type"]
+            )
+            all_fields = RoadProperties._meta.get_fields()
+            print(all_fields.data)
+            fields = {"field_name":all_fields}
+            serializer = RoadPropertiesSerializer(fields, many=True)
+            return Response(serializer.data)
+
+        if request.GET.get("latitude_1") and request.GET.get("longitude_1") and request.GET.get("latitude_2") and request.GET.get("longitude_2") :
+            lat1_value = float(request.GET["latitude_1"])
+            lon1_value = float(request.GET["longitude_1"])
+            lat2_value = float(request.GET["latitude_2"])
+            lon2_value = float(request.GET["longitude_2"])
+            coords_1 = (lat1_value, lon1_value)
+            coords_2 = (lat2_value, lon2_value)
+
+            calculate_distance = geopy.distance.geodesic(coords_1, coords_2).km
+            road_names = RoadProperties.objects.filter(distance__range=[0, calculate_distance])
+            list_value = road_names.values_list("name")
+            context = {"road_name": list_value}
+            return Response(context)
+        else:
+            get_roadtype = RoadType.objects.all()
+            serializer = RoadTypeSerializers(get_roadtype, many=True)
+            return Response(serializer.data)
 
     def post(self, request):
+        import pdb;pdb.set_trace()
         """ Method for create a new road """
         if request.method == "POST":
             data = request.data
@@ -37,15 +63,7 @@ class RoadTypeView(APIView):
 class RoadView(APIView):
 
     """ View for CRUD(add,edit,delete) method """
-
-    # def get(self, request, id=None):
-    #     """ Method for get a road properties individual """
-    #     snippet = RoadProperties.objects.get(id=id)
-    #     serializer = RoadPropertiesSerializer(snippet)
-    #     return Response(serializer.data)
-    
-
-    
+ 
 
     def put(self, request, id=None):
         """Method for update a road using their id"""
@@ -64,32 +82,5 @@ class RoadView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class calculate_distance(APIView):
 
-    # def get_distance(self, request):
-    #     lat1_value = float(request.GET["latitude_1"])
-    #     lon1_value = float(request.GET["longitude_1"])
-    #     lat2_value = float(request.GET["latitude_2"])
-    #     lon2_value = float(request.GET["longitude_2"])
-    #     coords_1 = (lat1_value, lon1_value)
-    #     coords_2 = (lat2_value, lon2_value)
-
-    #     calculate_distance = geopy.distance.geodesic(coords_1, coords_2).km
-    #     road_names = RoadProperties.objects.filter(distance__range=[0, calculate_distance])
-    #     list_value = road_names.values_list("name")
-    #     context = {"road_name": list_value}
-    #     return Response(context)
-
-    def get(self, request):
-        import pdb;pdb.set_trace()
-        '''Function for get a attribute of a road type'''
-        # pylint: disable=no-member
-        get_roadproperty = RoadProperties.objects.filter(
-            road_type__road_type=request.GET["road_type"]
-        )
         
-        all_fields = RoadProperties._meta.get_fields()
-        print(all_fields.data)
-        fields = {"field_name":all_fields}
-        serializer = RoadPropertiesSerializer(fields, many=True)
-        return Response(serializer.data)
