@@ -1,5 +1,6 @@
 """ Views for road details in rest_framework using APIView """
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 import geopy.distance
@@ -8,6 +9,7 @@ from .serializers import RoadPropertiesSerializer, RoadTypeSerializers
 
 class RoadTypeView(APIView):
     """ View for get type of road """
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         """Function for get road type with its id"""
