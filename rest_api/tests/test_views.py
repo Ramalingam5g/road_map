@@ -16,7 +16,7 @@ client = Client()
 
 class ApiUrlsTests(TestCase):
     
-    def test_get_roadtype(self):
+    def test_get(self):
         url = reverse('RoadTypeView')
         print(url)
         self.assertEquals(resolve(url).func.view_class,RoadTypeView)
@@ -25,11 +25,9 @@ class ApiUrlsTests(TestCase):
 
 class RoadTypeViewTests(APITestCase):
     road_url = reverse("RoadTypeView")
-    roadtype_url = reverse("Rod")
-    #import pdb;pdb.set_trace()
+    # roadtype_url = reverse("RoadView")
+   
     def setUp(self):
-        import pdb;pdb.set_trace()
-        #import pdb;pdb.set_trace()
         self.user = User.objects.create_user(
             username='admin', password='admin')
         self.token = Token.objects.create(user=self.user)
@@ -38,14 +36,27 @@ class RoadTypeViewTests(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
     def test_get_roadtype(self):
-        import pdb;pdb.set_trace()
-        #import pdb;pdb.set_trace()
         response = self.client.get(self.road_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+    
+    def test_get_attributes(self):
+        data = {
+            "road_type":""
+        }
+        response = self.client.get(self.road_url,data,format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    
+    def test_get_distance(self):
+        data = {
+            "latitude_1":"",
+            "longitude_1":"",
+            "latitude_2":"",
+            "longitude_2":""
+            }
+        response = self.client.get(self.road_url,data,format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_post_roadtype(self):
-        import pdb;pdb.set_trace()
-        #import pdb;pdb.set_trace()
+    def test_post(self):
         data = {
             "name":"eldamasroad",
             "length":"415.25",
@@ -58,19 +69,11 @@ class RoadTypeViewTests(APITestCase):
         }
         response = self.client.post(self.road_url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(len(response.data), 8)
+        self.assertNotEqual(len(response.data), 7)
 
     def test_delete_roadtype(self):
-        data = {
-            "name":"eldamasroad",
-            "length":"415.25",
-            "width":"4533.25",
-            "latitude":"2322.25",
-            "longitude":"3422.25",
-            "distance":"10"
-            
-        }
-
+        response = self.client.delete(self.roadtype_url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
 
 
