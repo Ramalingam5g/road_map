@@ -9,7 +9,7 @@ from rest_api.serializers import RoadPropertiesSerializer,RoadTypeSerializers
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 import pdb;pdb.set_trace()
-
+from rest_framework.authtoken.models import Token
 # initialize the APIClient app
 client = Client()
 
@@ -31,7 +31,7 @@ class RoadTypeViewTests(APITestCase):
         self.user = User.objects.create_user(
             username='admin', password='admin')
         self.token = Token.objects.create(user=self.user)
-        print(self.token)
+        #print(self.token)
         #self.client = APIClient()
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
@@ -41,7 +41,7 @@ class RoadTypeViewTests(APITestCase):
     
     def test_get_attributes(self):
         data = {
-            "road_type":""
+            "road_type":"urban"
         }
         response = self.client.get(self.road_url,data,format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -53,7 +53,8 @@ class RoadTypeViewTests(APITestCase):
             "latitude_2":"",
             "longitude_2":""
             }
-        response = self.client.get(self.road_url,data,format='json')
+        #import pdb;pdb.set_trace()    
+        response = self.client.get(self.road_url,data,format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_post(self):
@@ -64,16 +65,15 @@ class RoadTypeViewTests(APITestCase):
             "latitude":"2322.25",
             "longitude":"3422.25",
             "distance":"10",
-            "road_type":"highway"
-            
+            "road_type":"highway"   
         }
         response = self.client.post(self.road_url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertNotEqual(len(response.data), 7)
 
-    def test_delete_roadtype(self):
-        response = self.client.delete(self.roadtype_url)
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+    #def test_delete_roadtype(self):
+    #    response = self.client.delete(self.roadtype_url)
+    #   self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
 
 
