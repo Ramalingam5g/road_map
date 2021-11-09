@@ -53,8 +53,9 @@ class RoadTypeViewTests(APITestCase):
             "latitude_2":"",
             "longitude_2":""
             }
-        #import pdb;pdb.set_trace()    
+        import pdb;pdb.set_trace()    
         response = self.client.get(self.road_url,data,format="json")
+        self.assertEqual(response.objects.count(), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_post(self):
@@ -67,6 +68,7 @@ class RoadTypeViewTests(APITestCase):
             "distance":"10",
             "road_type":"highway"   
         }
+        #import pdb;pdb.set_trace()
         response = self.client.post(self.road_url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertNotEqual(len(response.data), 7)
