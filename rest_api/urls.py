@@ -20,5 +20,5 @@ from .views import RoadView,RoadTypeView
 
 urlpatterns = [
     path('roadtypeview',RoadTypeView.as_view(),name='RoadTypeView'),
-    path('road/(?P<id>[0-9]+)$',RoadView.as_view(),name='road'),
+    path('road/<int:id>',RoadView.as_view(),name='road'),
 ]
