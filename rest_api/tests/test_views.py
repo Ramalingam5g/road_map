@@ -20,7 +20,7 @@ class ApiUrlsTests(TestCase):
         url = reverse('RoadTypeView')
         print(url)
         self.assertEqual(resolve(url).func.view_class,RoadTypeView)
-    
+
 class RoadTypeViewTests(APITestCase):
     road_url = reverse("RoadTypeView")
     # roadtype_url = reverse("RoadView")
@@ -53,8 +53,9 @@ class RoadTypeViewTests(APITestCase):
             }
         import pdb;pdb.set_trace()
         response = self.client.get(self.road_url,data,format="json")
-        import pdb;pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        import pdb;pdb.set_trace()
+        self.assertEqual(response.data, 6.509791866269829)        
         #with self.assertRaises(ValueError):
          #   response = self.client.get(self.road_url,data,format="json")
 
@@ -77,17 +78,3 @@ class RoadTypeViewTests(APITestCase):
     #def test_delete_roadtype(self):
     #    response = self.client.delete(self.roadtype_url)
     #   self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
-
-
-
-
-
-
-
-
-
-
-
-
-

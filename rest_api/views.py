@@ -6,21 +6,22 @@ from rest_framework import status
 import geopy.distance
 from .models import RoadProperties, RoadType
 from .serializers import RoadPropertiesSerializer, RoadTypeSerializers
-import pdb;pdb.set_trace()
 
 class RoadTypeView(APIView):
     """ View for get type of road """
-    import pdb;pdb.set_trace() 
+
     permission_classes = [IsAuthenticated]
+
     def get(self, request):
         """Function for get road type with its id"""
         if request.GET.get("road_type"):
+            # pylint: disable=no-member
             get_roadproperty = RoadProperties.objects.filter(
                 road_type__road_type=request.GET["road_type"]
             )
             all_fields = RoadProperties._meta.get_fields()
             print(all_fields)
-            fields = {"field_name":all_fields}
+            #fields = {"field_name":all_fields}
             serializer = RoadPropertiesSerializer(get_roadproperty, many=True)
             return Response(serializer.data)
             # serializer = RoadPropertiesSerializer(get_roadproperty, many=True)
@@ -39,12 +40,13 @@ class RoadTypeView(APIView):
             import pdb;pdb.set_trace()
             calculate_distance = geopy.distance.geodesic(coords_1, coords_2).km
             print("Distance:",calculate_distance)
-            road_names = RoadProperties.objects.filter(distance__range=[0, calculate_distance])
+            road_names = RoadProperties.objects.filter(distance__range=[0, calculate_distance]) # pylint: disable=no-member
             list_value = road_names.values_list("name")
             context = {"road_name": list_value}
-            return Response(context)
+            #context = {"distance": calculate_distance}
+            return Response(calculate_distance)
 
-        get_roadtype = RoadType.objects.all()
+        get_roadtype = RoadType.objects.all()  # pylint: disable=no-member
         serializer = RoadTypeSerializers(get_roadtype, many=True)
         return Response(serializer.data)
 
