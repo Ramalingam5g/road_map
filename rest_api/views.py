@@ -44,7 +44,7 @@ class RoadTypeView(APIView):
             list_value = road_names.values_list("name")
             context = {"road_name": list_value}
             #context = {"distance": calculate_distance}
-            return Response(calculate_distance)
+            return Response(context)
 
         get_roadtype = RoadType.objects.all()  # pylint: disable=no-member
         serializer = RoadTypeSerializers(get_roadtype, many=True)

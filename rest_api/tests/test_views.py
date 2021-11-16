@@ -55,7 +55,7 @@ class RoadTypeViewTests(APITestCase):
         response = self.client.get(self.road_url,data,format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         import pdb;pdb.set_trace()
-        self.assertEqual(response.data, 6.509791866269829)        
+        self.assertEqual(response.data, 6.509791866269829)
         #with self.assertRaises(ValueError):
          #   response = self.client.get(self.road_url,data,format="json")
 
