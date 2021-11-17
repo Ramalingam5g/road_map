@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_api',
     'rest_framework_simplejwt',
-    #'rest_framework.authtoken',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -117,9 +117,14 @@ AUTH_PASSWORD_VALIDATORS = [
 #     ]
 #}
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+'DEFAULT_AUTHENTICATION_CLASSES':(
+    'rest_framework_simplejwt.authentication.JWTAuthentication',
+
+),
+'DEFAULT_PERMISSION_CLASSES':(
+    'rest_framework.permissions.IsAuthenticated',
+)
+
 }
 
 # Internationalization

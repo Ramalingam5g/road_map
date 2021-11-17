@@ -37,7 +37,7 @@ class RoadTypeView(APIView):
             lon2_value = float(request.GET["longitude_2"])
             coords_1 = (lat1_value, lon1_value)
             coords_2 = (lat2_value, lon2_value)
-            import pdb;pdb.set_trace()
+            #import pdb;pdb.set_trace()
             calculate_distance = geopy.distance.geodesic(coords_1, coords_2).km
             print("Distance:",calculate_distance)
             road_names = RoadProperties.objects.filter(distance__range=[0, calculate_distance]) # pylint: disable=no-member

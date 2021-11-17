@@ -8,7 +8,7 @@ from rest_api.models import RoadProperties,RoadType
 from rest_api.serializers import RoadPropertiesSerializer,RoadTypeSerializers
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
-# import pdb;pdb.set_trace()
+import pdb;pdb.set_trace()
 from rest_framework.authtoken.models import Token
 # initialize the APIClient app
 client = Client()
@@ -20,12 +20,14 @@ class ApiUrlsTests(TestCase):
         url = reverse('RoadTypeView')
         print(url)
         self.assertEqual(resolve(url).func.view_class,RoadTypeView)
-
+    
 class RoadTypeViewTests(APITestCase):
+    import pdb;pdb.set_trace()
     road_url = reverse("RoadTypeView")
     # roadtype_url = reverse("RoadView")
    
     def setUp(self):
+        import pdb;pdb.set_trace()
         self.user = User.objects.create_user(
             username='admin', password='admin')
         self.token = Token.objects.create(user=self.user)
@@ -74,7 +76,33 @@ class RoadTypeViewTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertNotEqual(len(response.data), 7)
 
+class RoadViewTests(APITestCase):
+    road_url = reverse("RoadTypeView")
+    roadtype_url = reverse('Road', args=[1])
 
-    #def test_delete_roadtype(self):
-    #    response = self.client.delete(self.roadtype_url)
-    #   self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='admin', password='admin')
+        self.token = Token.objects.create(user=self.user)
+        print(self.token)
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+    def test_put(self):
+        data = {
+            "name":"eldamasroad",
+            "length":"415.25", 
+            "width":"4533.25",
+            "latitude":"2322.25",
+            "longitude":"3422.25",
+            "distance":"10",
+            "road_type":"highway"   
+        }
+        #import pdb;pdb.set_trace()
+        response = self.client.post(self.road_url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertNotEqual(len(response.data), 7)
+
+    def test_delete_roadtype(self):
+       response = self.client.delete(self.roadtype_url)
+       self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

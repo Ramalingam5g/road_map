@@ -21,7 +21,7 @@ from rest_framework_simplejwt import views as jwt_views
 
 urlpatterns = [
     path('roadtypeview',RoadTypeView.as_view(),name='RoadTypeView'),
-    path('road/<int:id>',RoadView.as_view(),name='road'),
+    path('road/<int:id>',RoadView.as_view(),name='Road'),
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
 ]
