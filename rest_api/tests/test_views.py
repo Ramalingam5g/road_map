@@ -31,6 +31,7 @@ class RoadTypeViewTests(APITestCase):
         self.client = APIClient()
         self.login_url = reverse("token_obtain_pair")
         self.roadtype_url = reverse("RoadTypeView")
+        self.road_url = reverse("Road")
         self.access_token = self.client.post(self.login_url,
         {'username':'admin', 'password':'admin'}).json()['access']
         #self.roadtype_url = reverse("Road")
@@ -55,36 +56,89 @@ class RoadTypeViewTests(APITestCase):
         self.assertEqual(response.status_code, 401)
 
     def test_get_roadtype(self):
-        import pdb;pdb.set_trace()
-        expected_response = {"road_type":"urban"}
+        #import pdb;pdb.set_trace()
+        
+        expected_response = {'message':'helloworld'}
         self.client.credentials(HTTP_AUTHORIZATION = 'Bearer'+ self.access_token)
+        #expected_response = {"road_type":"urban"}
         response = self.client.get(self.roadtype_url)
-        print(response)
+        print(response) 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json(),expected_response )
-    
-    # def test_get_attributes(self):c
-    #     data = {
-    #         "road_type":"urban"
-    #     }
-    #     expected_response = data
-    #     self.client.credentials(HTTP_AUTHORIZATION = 'Bearer'+ self.access_token)
-    #     response = self.client.get(self.roadtype_url)
-    #     self.assertEqual(response.status_code, 200)
 
-    #     self.assertEqual(response.json(),expected_response )
-    # # def test_get_distance(self):
+    def test_get_distance(self):
+        data = {
+            "latitude_1":13.0629,
+            "longitude_1":80.1948,
+            "latitude_2":13.0405,
+            "longitude_2":80.2503
+            }
+        import pdb;pdb.set_trace()
+        self.client.credentials(HTTP_AUTHORIZATION = 'Bearer'+ self.access_token)
+        response = self.client.get(self.roadtype_url,data,format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)  
+        import pdb;pdb.set_trace()
+        self.assertEqual(response.data, 6.509791866269829)
+    
+    def test_get_attributes(self):
+        data = {
+            "road_type":"urban"
+        }
+        expected_response = data
+        self.client.credentials(HTTP_AUTHORIZATION = 'Bearer'+ self.access_token)
+        response = self.client.get(self.roadtype_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(),expected_response)
+
+    def test_put(self):
+        data = {
+            "name":"eldamasroad",
+            "length":"415.25", 
+            "width":"4533.25",
+            "latitude":"2322.25",
+            "longitude":"3422.25",
+            "distance":"10",
+            "road_type":"highway"   
+        }
+        self.client.credentials(HTTP_AUTHORIZATION = 'Bearer'+ self.access_token)
+        response = self.client.get(self.road_url)
+        self.assertEqual(response.status_code, 200)
+# class RoadViewTests(APITestCase):
+
+#     import pdb;pdb.set_trace()
+#     self.user = User.objects.create_user(username='admin', password='admin')
+#     self.client = APIClient()
+#     self.login_url = reverse("token_obtain_pair")
+#     self.refresh_url = reverese("token_refresh")
+#     self.roadtype_url = reverse("RoadTypeView")
+#     self.road_url = reverse("Road")
+#     self.access_token = self.client.post(self.login_url,
+#     {'username':'admin', 'password':'admin'}).json()['access']
+            
+
+
+    # def test_put(self):
     #     data = {
-    #         "latitude_1":13.0629,
-    #         "longitude_1":80.1948,
-    #         "latitude_2":13.0405,
-    #         "longitude_2":80.2503
-    #         }
-    #     import pdb;pdb.set_trace()
-    #     response = self.client.get(self.road_url,data,format="json")
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
-    #     import pdb;pdb.set_trace()
-    #     self.assertEqual(response.data, 6.509791866269829)
+    #         "name":"eldamasroad",
+    #         "length":"415.25", 
+    #         "width":"4533.25",
+    #         "latitude":"2322.25",
+    #         "longitude":"3422.25",
+    #         "distance":"10",
+    #         "road_type":"highway"   
+    #     }
+#         #import pdb;pdb.set_trace()   
+#         self.client.credentials(HTTP_AUTHORIZATION = 'Bearer'+ self.access_token)
+#         response = self.client.get(self.roadtype_url,data,format="json")
+#         self.assertEqual(response.status_code, status.HTTP_200_OK)  
+
+    # def test_delete_roadtype(self):
+    #    response = self.client.delete(self.roadtype_url)
+    #    self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    
+
+    
         #with self.assertRaises(ValueError):
          #   response = self.client.get(self.road_url,data,format="json")
         #self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
