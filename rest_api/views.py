@@ -9,11 +9,13 @@ from .serializers import RoadPropertiesSerializer, RoadTypeSerializers
 
 class RoadTypeView(APIView):
     """ View for get type of road """
+    import pdb;pdb.set_trace()
 
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         """Function for get road type with its id"""
+        import pdb;pdb.set_trace()
         if request.GET.get("road_type"):
             # pylint: disable=no-member
             get_roadproperty = RoadProperties.objects.filter(
