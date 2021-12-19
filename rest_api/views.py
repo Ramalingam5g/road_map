@@ -1,5 +1,6 @@
 """ Views for road details in rest_framework using APIView """
 from rest_framework.views import APIView
+from rest_framework import permissions ,viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
@@ -9,13 +10,13 @@ from .serializers import RoadPropertiesSerializer, RoadTypeSerializers
 
 class RoadTypeView(APIView):
     """ View for get type of road """
-    import pdb;pdb.set_trace()
+    #import pdb;pdb.set_trace()
 
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         """Function for get road type with its id"""
-        import pdb;pdb.set_trace()
+        #import pdb;pdb.set_trace()
         if request.GET.get("road_type"):
             # pylint: disable=no-member
             get_roadproperty = RoadProperties.objects.filter(
@@ -23,11 +24,9 @@ class RoadTypeView(APIView):
             )
             all_fields = RoadProperties._meta.get_fields()
             print(all_fields)
-            #fields = {"field_name":all_fields}
+            fields = {"field_name":all_fields}
             serializer = RoadPropertiesSerializer(get_roadproperty, many=True)
             return Response(serializer.data)
-            # serializer = RoadPropertiesSerializer(get_roadproperty, many=True)
-            # return Response(serializer.data)
 
         if (request.GET.get("latitude_1")
             and request.GET.get("longitude_1")
@@ -53,7 +52,6 @@ class RoadTypeView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-
         """ Method for create a new road """
         if request.method == "POST":
             data = request.data
@@ -73,6 +71,7 @@ class RoadTypeView(APIView):
 class RoadView(APIView):
 
     """ View for CRUD(edit,delete) method """
+    permission_classes = [IsAuthenticated]
 
     def put(self, request, id=None):
         """Method for update a road using their id"""

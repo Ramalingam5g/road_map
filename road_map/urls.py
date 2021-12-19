@@ -18,5 +18,7 @@ from django.urls import path,include
 #import pdb;pdb.set_trace()
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('rest_api.urls'))
+    path('',include('rest_api.urls')),
+    path('api-auth/',include('rest_framework.urls'))
 ]
+

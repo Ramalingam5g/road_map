@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-hfc6hfo_im)gse5@g(%)w7@89(i12g&-p%f10w1v)8ilzhd+4(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -109,13 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-# REST_FRAMEWORK = {
-#     ...
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         ...
-#         'rest_framework_simplejwt.authentication.JWTAuthentication',
-#     ]
-#}
+
 REST_FRAMEWORK = {
 'DEFAULT_AUTHENTICATION_CLASSES':(
     'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -124,7 +118,6 @@ REST_FRAMEWORK = {
 'DEFAULT_PERMISSION_CLASSES':(
     'rest_framework.permissions.IsAuthenticated',
 )
-
 }
 
 # Internationalization
